@@ -19,5 +19,13 @@ namespace MyLibrary.ViewModels
             Libraries = context.Library.Select(library =>
             new SelectListItem { Text = library.Name, Value = library.LibraryId.ToString() }).ToList();
         }
+
+        public BookEditViewModel(ApplicationDbContext context, Book book)
+        {
+            Libraries = context.Library.Select(library =>
+            new SelectListItem { Text = library.Name, Value = library.LibraryId.ToString() }).ToList();
+            Book = book;
+        }
+
     }
 }
