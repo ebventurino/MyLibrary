@@ -15,9 +15,6 @@ namespace MyLibrary.Models
 
         public string LastName { get; set; }
 
-        [Display(Name = "Checked Out Books")]
-        public int BookId { get; set; }
-
-        public Book Book { get; set; }
+        public virtual ICollection<Book> Books { get; set; }
     }
 }

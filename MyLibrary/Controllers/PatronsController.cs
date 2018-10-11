@@ -22,8 +22,7 @@ namespace MyLibrary.Controllers
         // GET: Patrons
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Patron.Include(p => p.Book);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.Patron.ToListAsync());
         }
 
         // GET: Patrons/Details/5
@@ -35,7 +34,6 @@ namespace MyLibrary.Controllers
             }
 
             var patron = await _context.Patron
-                .Include(p => p.Book)
                 .FirstOrDefaultAsync(m => m.PatronId == id);
             if (patron == null)
             {
@@ -48,7 +46,6 @@ namespace MyLibrary.Controllers
         // GET: Patrons/Create
         public IActionResult Create()
         {
-            ViewData["BookId"] = new SelectList(_context.Book, "BookId", "Author");
             return View();
         }
 
@@ -57,7 +54,7 @@ namespace MyLibrary.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PatronId,FirstName,LastName,BookId")] Patron patron)
+        public async Task<IActionResult> Create([Bind("PatronId,FirstName,LastName")] Patron patron)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +62,6 @@ namespace MyLibrary.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BookId"] = new SelectList(_context.Book, "BookId", "Author", patron.BookId);
             return View(patron);
         }
 
@@ -82,7 +78,6 @@ namespace MyLibrary.Controllers
             {
                 return NotFound();
             }
-            ViewData["BookId"] = new SelectList(_context.Book, "BookId", "Author", patron.BookId);
             return View(patron);
         }
 
@@ -91,7 +86,7 @@ namespace MyLibrary.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PatronId,FirstName,LastName,BookId")] Patron patron)
+        public async Task<IActionResult> Edit(int id, [Bind("PatronId,FirstName,LastName")] Patron patron)
         {
             if (id != patron.PatronId)
             {
@@ -118,7 +113,6 @@ namespace MyLibrary.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BookId"] = new SelectList(_context.Book, "BookId", "Author", patron.BookId);
             return View(patron);
         }
 
@@ -131,7 +125,6 @@ namespace MyLibrary.Controllers
             }
 
             var patron = await _context.Patron
-                .Include(p => p.Book)
                 .FirstOrDefaultAsync(m => m.PatronId == id);
             if (patron == null)
             {
